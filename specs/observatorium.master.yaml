@@ -1,0 +1,33 @@
+openapi: 3.1.0
+info:
+  title: World Observatorium API
+  version: "0.1.0"
+  description: Unified planetary sensing interface for GPT Actions.
+servers:
+  - url: https://observatorium.api.khaotic.ai
+paths:
+  /snapshot/global:
+    get:
+      operationId: getGlobalSnapshot
+      summary: Returns real-time snapshot across all domains.
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: lon
+          in: query
+          required: true
+          schema: { type: number }
+      responses:
+        "200":
+          description: Aggregated data snapshot.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  fetchedAt: { type: string, format: date-time }
+                  time: { type: object }
+                  weather: { type: object }
