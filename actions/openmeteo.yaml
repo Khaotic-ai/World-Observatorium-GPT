@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: Open-Meteo Weather
+  version: "1.0.0"
+  description: |
+    Free weather API for current conditions and forecasts. No API key required.
+    Use for local snapshots and global samples. Always request metric units.
+servers:
+  - url: https://api.open-meteo.com/v1
+
+paths:
+  /forecast:
+    get:
+      operationId: getForecast
+      summary: Get current weather and forecast
+      description: |
+        Returns current conditions and/or forecasts for a given latitude/longitude.
+        At minimum, request `current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`
+        to build standard Observatorium weather snapshots.
+      parameters:
+        - name: latitude
+          in: query
+          required: true
+          schema: { type: number, minimum: -90, maximum: 90 }
+          description: Decimal latitude in degrees
+        - name: longitude
+          in: query
+          required: true
+          schema: { type: number, minimum: -180, maximum: 180 }
+          description: Decimal longitude in degrees
+        - name: current
+          in: query
+          required: false
+          description: Comma-separated current variables
+          schema:
+            type: string
+            example: temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code
+        - name: hourly
+          in: query
+          required: false
+          description: Comma-separated hourly variables
+          schema:
+            type: string
+            example: temperature_2m,relative_humidity_2m,precipitation,cloud_cover,wind_speed_10m
+        - name: daily
+          in: query
+          required: false
+          description: Comma-separated daily variables
+          schema:
+            type: string
+            example: temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max
+        - name: timezone
+          in: query
+          required: false
+          schema:
+            type: string
+            example: UTC
+          description: |
+            Output timezone. Use `UTC` for Observatorium reports to align across domains.
+        - name: units
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [metric, imperial]
+            default: metric
+          description: Convenience flag; if omitted, specify units via variable names.
+        - name: forecast_days
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 16 }
+          description: Number of forecast days (max 16)
+      responses:
+        "200":
+          description: Forecast payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForecastResponse"
+              examples:
+                sample:
+                  value:
+                    latitude: 35.68
+                    longitude: 139.69
+                    elevation: 40
+                    timezone: "UTC"
+                    generationtime_ms: 0.412
+                    current_units:
+                      time: "iso8601"
+                      interval: "minutes"
+                      temperature_2m: "°C"
+                      wind_speed_10m: "m/s"
+                    current:
+                      time: "2025-10-17T20:15:00Z"
+                      temperature_2m: 21.4
+                      apparent_temperature: 21.0
+                      relative_humidity_2m: 58
+                      wind_speed_10m: 2.0
+                      weather_code: 0
+                    hourly:
+                      time: ["2025-10-17T20:00:00Z","2025-10-17T21:00:00Z"]
+                      temperature_2m: [21.4, 20.9]
+                      precipitation: [0.0, 0.0]
+                    daily:
+                      time: ["2025-10-17","2025-10-18"]
+                      temperature_2m_max: [23.0, 22.1]
+                      temperature_2m_min: [16.2, 15.9]
+                      precipitation_sum: [0.0, 0.3]
+        "4XX":
+          description: Client error
+        "5XX":
+          description: Server error
+
+components:
+  schemas:
+    ForecastResponse:
+      type: object
+      required: [latitude, longitude, timezone]
+      properties:
+        latitude: { type: number }
+        longitude: { type: number }
+        elevation: { type: number }
+        timezone: { type: string }
+        generationtime_ms: { type: number, description: Milliseconds to generate response }
+        current_units:
+          type: object
+          additionalProperties: true
+          description: Unit annotations for fields in `current`
+        current:
+          type: object
+          properties:
+            time: { type: string, format: date-time }
+            temperature_2m: { type: number, description: Air temperature at 2 m [°C] }
+            apparent_temperature: { type: number, description: Feels-like temperature [°C] }
+            relative_humidity_2m: { type: number, description: Relative humidity [%] }
+            wind_speed_10m: { type: number, description: Wind speed at 10 m [m/s] }
+            weather_code: { type: integer, description: WMO code }
+        hourly_units:
+          type: object
+          additionalProperties: true
+        hourly:
+          type: object
+          properties:
+            time:
+              type: array
+              items: { type: string, format: date-time }
+            temperature_2m:
+              type: array
+              items: { type: number }
+            relative_humidity_2m:
+              type: array
+              items: { type: number }
+            precipitation:
+              type: array
+              items: { type: number, description: Precipitation [mm] }
+            cloud_cover:
+              type: array
+              items: { type: number, description: Cloud cover [%] }
+            wind_speed_10m:
+              type: array
+              items: { type: number, description: Wind speed [m/s] }
+        daily_units:
+          type: object
+          additionalProperties: true
+        daily:
+          type: object
+          properties:
+            time:
+              type: array
+              items: { type: string, format: date }
+            temperature_2m_max:
+              type: array
+              items: { type: number }
+            temperature_2m_min:
+              type: array
+              items: { type: number }
+            precipitation_sum:
+              type: array
+              items: { type: number }
+            uv_index_max:
+              type: array
+              items: { type: number }

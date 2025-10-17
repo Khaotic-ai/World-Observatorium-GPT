@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: WorldTimeAPI
+  version: "1.0.0"
+  description: |
+    Lightweight UTC time reference. Use this to anchor all Observatorium outputs to an authoritative UTC timestamp.
+    No API key is required.
+
+servers:
+  - url: https://worldtimeapi.org/api
+
+paths:
+  /timezone/Etc/UTC:
+    get:
+      operationId: getUtcTime
+      summary: Get the current UTC time (authoritative)
+      description: Returns the current time in UTC with multiple formats.
+      parameters: []
+      responses:
+        "200":
+          description: Current UTC time
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimeResponse"
+              examples:
+                sample:
+                  value:
+                    abbreviation: "UTC"
+                    client_ip: "203.0.113.42"
+                    datetime: "2025-10-17T20:15:31.298921+00:00"
+                    day_of_week: 5
+                    day_of_year: 290
+                    dst: false
+                    dst_offset: 0
+                    raw_offset: 0
+                    timezone: "Etc/UTC"
+                    unixtime: 1760732131
+                    utc_datetime: "2025-10-17T20:15:31.298921+00:00"
+                    utc_offset: "+00:00"
+        "4XX":
+          description: Client error
+        "5XX":
+          description: Server error
+
+components:
+  schemas:
+    TimeResponse:
+      type: object
+      required:
+        - utc_datetime
+        - unixtime
+        - timezone
+      properties:
+        abbreviation:
+          type: string
+          description: Time zone abbreviation
+        datetime:
+          type: string
+          format: date-time
+          description: Localized datetime (with offset)
+        utc_datetime:
+          type: string
+          format: date-time
+          description: UTC datetime (ISO8601)
+        unixtime:
+          type: integer
+          description: Seconds since Unix epoch (UTC)
+        timezone:
+          type: string
+          example: Etc/UTC
+        utc_offset:
+          type: string
+          example: "+00:00"
+        day_of_week:
+          type: integer
+        day_of_year:
+          type: integer
+        dst:
+          type: boolean
+        dst_offset:
+          type: integer
+        raw_offset:
+          type: integer
+        client_ip:
+          type: string
