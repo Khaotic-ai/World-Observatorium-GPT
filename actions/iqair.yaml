@@ -1,0 +1,47 @@
+openapi: 3.1.0
+info:
+  title: IQAir Air Quality
+  version: "1.0.0"
+  description: |
+    Nearest-city air quality. Requires API key via ?key=YOUR_KEY or server-side injection.
+servers:
+  - url: https://api.airvisual.com/v2
+
+paths:
+  /nearest_city:
+    get:
+      operationId: getAirQualityNearest
+      summary: Get nearest-city AQI and PM2.5 for given coordinates
+      parameters:
+        - { name: lat, in: query, required: true, schema: { type: number, minimum: -90, maximum: 90 } }
+        - { name: lon, in: query, required: true, schema: { type: number, minimum: -180, maximum: 180 } }
+        - { name: key, in: query, required: true, schema: { type: string }, description: "IQAir API key" }
+      responses:
+        "200":
+          description: Nearest city air quality
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  data:
+                    type: object
+                    properties:
+                      city: { type: string }
+                      state: { type: string }
+                      country: { type: string }
+                      current:
+                        type: object
+                        properties:
+                          pollution:
+                            type: object
+                            properties:
+                              aqius: { type: number, description: "AQI (US)" }
+                              aqicn: { type: number, description: "AQI (CN)" }
+                              ts: { type: string, format: date-time }
+                          weather:
+                            type: object
+                            additionalProperties: true
+        "4XX": { description: Client error }
+        "5XX": { description: Server error }

@@ -1,0 +1,51 @@
+{
+  "name": "World Observatorium",
+  "version": "0.2.1",
+  "domains": [
+    {
+      "key": "time",
+      "status": "live",
+      "actions": [
+        "getUtcTime"
+      ]
+    },
+    {
+      "key": "weather",
+      "status": "live",
+      "actions": [
+        "getForecast"
+      ]
+    },
+    {
+      "key": "air",
+      "status": "ready",
+      "actions": [
+        "getAirQualityNearest"
+      ]
+    },
+    {
+      "key": "seismic",
+      "status": "live",
+      "actions": [
+        "getEarthquakesPastDay"
+      ]
+    },
+    {
+      "key": "solar",
+      "status": "live",
+      "actions": [
+        "fetch_flares"
+      ]
+    },
+    {
+      "key": "gw",
+      "status": "live",
+      "actions": [
+        "fetch_recent"
+      ]
+    }
+  ],
+  "actions_dir": "actions/",
+  "internal_api_spec": "specs/observatorium.master.yaml",
+  "orchestrator": "orchestrator/app.py"
+}
