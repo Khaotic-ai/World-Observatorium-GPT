@@ -1,0 +1,40 @@
+openapi: 3.1.0
+info:
+  title: USGS Earthquakes (Query API)
+  version: "1.0.0"
+  description: >
+    Safer, bounded earthquake queries using the FDSN /query API.
+servers:
+  - url: https://earthquake.usgs.gov/fdsnws/event/1
+paths:
+  /query:
+    get:
+      operationId: getEarthquakesQuery
+      summary: Query earthquakes in a time window with optional filters
+      parameters:
+        - { name: format, in: query, required: true, schema: { type: string, enum: [geojson] }, example: geojson }
+        - { name: starttime, in: query, required: true, schema: { type: string }, example: "2025-10-17T00:00:00Z" }
+        - { name: endtime, in: query, required: true, schema: { type: string }, example: "2025-10-18T23:59:59Z" }
+        - { name: minmagnitude, in: query, required: false, schema: { type: number }, example: 3 }
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 200 }, example: 50 }
+        - { name: orderby, in: query, required: false, schema: { type: string, enum: [time, time-asc, magnitude, magnitude-asc] }, example: time }
+      responses:
+        "200":
+          description: Filtered earthquake results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  features:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        properties:
+                          type: object
+                          properties:
+                            mag: { type: number }
+                            place: { type: string }
+                            time: { type: number, description: "epoch ms" }

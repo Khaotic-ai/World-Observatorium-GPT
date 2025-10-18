@@ -1,0 +1,11 @@
+{
+  "domain": "seismic",
+  "provider": "USGS FDSN",
+  "actions": [
+    "getEarthquakesQuery"
+  ],
+  "allowlist": [
+    "earthquake.usgs.gov"
+  ],
+  "file": "actions/usgs_query.yaml"
+}

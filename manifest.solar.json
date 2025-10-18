@@ -1,0 +1,13 @@
+{
+  "domain": "solar",
+  "provider": "NASA DONKI",
+  "actions": [
+    "getSolarFlares",
+    "getCoronalMassEjections",
+    "getGeomagneticStorms"
+  ],
+  "allowlist": [
+    "api.nasa.gov"
+  ],
+  "file": "actions/nasa_donki.yaml"
+}

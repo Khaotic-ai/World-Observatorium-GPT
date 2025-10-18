@@ -1,0 +1,11 @@
+{
+  "domain": "weather",
+  "provider": "Open-Meteo",
+  "actions": [
+    "getForecast"
+  ],
+  "allowlist": [
+    "api.open-meteo.com"
+  ],
+  "file": "actions/open_meteo.yaml"
+}

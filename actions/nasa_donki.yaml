@@ -1,0 +1,86 @@
+openapi: 3.1.0
+info:
+  title: NASA DONKI (Space Weather Intelligence)
+  version: "1.0.0"
+  description: >
+    Space-weather events from NASA DONKI. Provide api_key in query parameters.
+servers:
+  - url: https://api.nasa.gov/DONKI
+
+paths:
+  /FLR:
+    get:
+      operationId: getSolarFlares
+      summary: Retrieve solar flares within a date range
+      parameters:
+        - { name: startDate, in: query, required: true, schema: { type: string }, example: "2025-10-15" }
+        - { name: endDate, in: query, required: true, schema: { type: string }, example: "2025-10-18" }
+        - { name: api_key, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Solar flare records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    flrID: { type: string }
+                    classType: { type: string }
+                    sourceLocation: { type: string }
+                    beginTime: { type: string }
+                    peakTime: { type: string }
+                    endTime: { type: string }
+
+  /CME:
+    get:
+      operationId: getCoronalMassEjections
+      summary: Retrieve CME events
+      parameters:
+        - { name: startDate, in: query, required: true, schema: { type: string } }
+        - { name: endDate, in: query, required: true, schema: { type: string } }
+        - { name: mostAccurateOnly, in: query, required: false, schema: { type: boolean }, example: true }
+        - { name: api_key, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: CME records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    activityID: { type: string }
+                    startTime: { type: string }
+                    speed: { type: number }
+                    note: { type: string }
+
+  /GST:
+    get:
+      operationId: getGeomagneticStorms
+      summary: Retrieve geomagnetic storm data
+      parameters:
+        - { name: startDate, in: query, required: true, schema: { type: string } }
+        - { name: endDate, in: query, required: true, schema: { type: string } }
+        - { name: api_key, in: query, required: true, schema: { type: string } }
+      responses:
+        "200":
+          description: Geomagnetic storms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    gstID: { type: string }
+                    startTime: { type: string }
+                    allKpIndex:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          kpIndex: { type: number }
+                          observedTime: { type: string }

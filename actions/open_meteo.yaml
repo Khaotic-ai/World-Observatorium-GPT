@@ -1,0 +1,30 @@
+openapi: 3.1.0
+info:
+  title: Open-Meteo (Current Weather)
+  version: "1.0.0"
+  description: >
+    Fetch current weather metrics. Always pass latitude, longitude, timezone=UTC,
+    and the 'current' fields you need.
+servers:
+  - url: https://api.open-meteo.com/v1
+paths:
+  /forecast:
+    get:
+      operationId: getForecast
+      summary: Get current weather
+      parameters:
+        - { name: latitude, in: query, required: true, schema: { type: number } }
+        - { name: longitude, in: query, required: true, schema: { type: number } }
+        - { name: timezone, in: query, required: false, schema: { type: string }, example: UTC }
+        - { name: current, in: query, required: false, schema: { type: string }, example: "temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,weather_code" }
+      responses:
+        "200":
+          description: Weather payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  latitude: { type: number }
+                  longitude: { type: number }
+                  current: { type: object }
