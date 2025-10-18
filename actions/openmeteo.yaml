@@ -115,13 +115,18 @@ components:
   schemas:
     ForecastResponse:
       type: object
-      required: [latitude, longitude, timezone]
+      required:
+        - latitude
+        - longitude
+        - timezone
       properties:
         latitude: { type: number }
         longitude: { type: number }
         elevation: { type: number }
         timezone: { type: string }
-        generationtime_ms: { type: number, description: Milliseconds to generate response }
+        generationtime_ms:
+          type: number
+          description: "Milliseconds to generate response"
         current_units:
           type: object
           additionalProperties: true
@@ -130,11 +135,21 @@ components:
           type: object
           properties:
             time: { type: string, format: date-time }
-            temperature_2m: { type: number, description: Air temperature at 2 m [°C] }
-            apparent_temperature: { type: number, description: Feels-like temperature [°C] }
-            relative_humidity_2m: { type: number, description: Relative humidity [%] }
-            wind_speed_10m: { type: number, description: Wind speed at 10 m [m/s] }
-            weather_code: { type: integer, description: WMO code }
+            temperature_2m:
+              type: number
+              description: "Air temperature at 2 m [°C]"
+            apparent_temperature:
+              type: number
+              description: "Feels-like temperature [°C]"
+            relative_humidity_2m:
+              type: number
+              description: "Relative humidity [%]"
+            wind_speed_10m:
+              type: number
+              description: "Wind speed at 10 m [m/s]"
+            weather_code:
+              type: integer
+              description: "WMO code"
         hourly_units:
           type: object
           additionalProperties: true
@@ -152,13 +167,19 @@ components:
               items: { type: number }
             precipitation:
               type: array
-              items: { type: number, description: Precipitation [mm] }
+              items:
+                type: number
+                description: "Precipitation [mm]"
             cloud_cover:
               type: array
-              items: { type: number, description: Cloud cover [%] }
+              items:
+                type: number
+                description: "Cloud cover [%]"
             wind_speed_10m:
               type: array
-              items: { type: number, description: Wind speed [m/s] }
+              items:
+                type: number
+                description: "Wind speed [m/s]"
         daily_units:
           type: object
           additionalProperties: true
