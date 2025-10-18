@@ -1,40 +1,47 @@
-name: Validate Specs & API
+name: Validate Observatorium Stack
 
 on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
-  lint-openapi:
+  validate:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Install Redocly CLI
-        run: npm install -g @redocly/cli@latest
-      - name: Lint OpenAPI master spec
-        run: redocly lint specs/observatorium.master.yaml
+    timeout-minutes: 10
 
-  python-tests:
-    runs-on: ubuntu-latest
+    env:
+      # Secrets are injected here; the script will read them.
+      NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+      IQAIR_KEY: ${{ secrets.IQAIR_KEY }}
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
+
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Import check
-        run: python - << 'PY'
-import importlib
-import sys
-for m in ["fastapi","uvicorn","requests"]:
-    importlib.import_module(m)
-print("Imports OK")
-PY
+          pip install pyyaml requests
+
+      # Optional but nice: ensure the workflow files themselves are valid YAML
+      - name: Lint workflow YAMLs
+        run: |
+          python - <<'EOF'
+          import sys, yaml, pathlib
+          for p in pathlib.Path(".github/workflows").glob("*.yml"):
+              with p.open() as f:
+                  yaml.safe_load(f)
+              print(f"✓ {p} is valid YAML")
+          EOF
+
+      - name: Run Observatorium validator
+        run: python scripts/validate.py
