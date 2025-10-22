@@ -1,0 +1,26 @@
+openapi: 3.1.0
+info:
+  title: LIGO GraceDB — Superevents
+  version: "1.0.0"
+  description: Recent gravitational-wave candidate superevents from GraceDB.
+servers:
+  - url: https://gracedb.ligo.org/api
+paths:
+  /superevents/:
+    get:
+      operationId: fetch_recent
+      summary: List recent superevents
+      parameters:
+        - { name: limit, in: query, required: false, schema: { type: integer, minimum: 1, maximum: 50 }, description: "Max events" }
+        - { name: state, in: query, required: false, schema: { type: string }, description: "Filter by state (e.g., INITIAL, CANDIDATE)" }
+      responses:
+        "200":
+          description: Recent superevents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  superevents:
+                    type: array
+                    items: { type: object }

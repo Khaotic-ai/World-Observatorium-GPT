@@ -1,0 +1,41 @@
+# ────────────────────────────────────────────────────────────────
+#  World Observatorium — Unified Configuration (Lunar Gate v2)
+#  Last updated: 2025-10-20
+# ────────────────────────────────────────────────────────────────
+
+# 🌐 Base URL (update this when a new Cloudflare tunnel is created)
+BASE = "https://communication-industries-crossword-montgomery.trycloudflare.com"
+
+# 🗺️ Default geographic coordinates (Cooloola Cove, Queensland, AU)
+LAT = -25.95
+LON = 153.06
+
+# ☀️ Optional API keys (leave blank if not used)
+NASA_DONKI_KEY = "phRrR5fLiKSwsWt32jlLfKqo3q7khXqm51BXUnfC"
+IQAIR_KEY = "81bad749-f55c-4e43-961e-36466e6dea68"
+
+# ⚙️ Included domains for composite snapshots
+# (comma-separated list, order defines evaluation priority)
+INCLUDE = "time,weather,air,quakes,solar,storms,magnetosphere,radiation,biofield"
+
+# 🧠 HIF Engine Settings (Biofield coherence model)
+[HIF]
+comfort_weight = 0.4
+air_quality_weight = 0.3
+magnetosphere_weight = 0.3
+stress_penalty = 0.2
+debug = false
+
+# 🌈 Reporting parameters
+[REPORT]
+location_name = "Cooloola Cove, QLD"
+units_wind = "m/s"
+units_pm25 = "µg/m³"
+
+# ⏱ Scheduler
+[DAEMON]
+interval = "daily"
+timezone = "UTC"
+trigger_hour = 0
+trigger_minute = 0
+# ────────────────────────────────────────────────────────────────

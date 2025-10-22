@@ -1,0 +1,17 @@
+
+### Snapshot (replace BASE if needed)
+@BASE = https://witness-danny-welding-nottingham.trycloudflare.com
+
+GET {{BASE}}/snapshot/global?lat=-25.95&lon=153.06
+
+### Biofield (POST snapshot body below if needed)
+POST {{BASE}}/biofield/coherence
+Content-Type: application/json
+
+{
+  "time": { "ok": true, "nowUtc": "2025-10-18T02:00:00Z" },
+  "weather": { "ok": true, "temperatureC": 22, "humidityPct": 50 },
+  "air": { "ok": true, "aqiUS": 40 },
+  "magnetosphere": { "ok": true, "kpIndex": 3.0, "kpTrend": "steady" },
+  "storms": { "ok": true, "alerts": [] }
+}

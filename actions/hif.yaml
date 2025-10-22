@@ -1,0 +1,43 @@
+openapi: 3.1.0
+info:
+  title: HIF Biofield Coherence
+  version: "1.0.0"
+paths:
+  /biofield/coherence:
+    post:
+      operationId: postBiofieldCoherence
+      summary: Compute biofield coherence from snapshot parts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                time: { type: object }
+                weather: { type: object }
+                air: { type: object }
+                quakes: { type: object }
+                solar: { type: object }
+                magnetosphere: { type: object }
+                storms: { type: object }
+      responses:
+        "200":
+          description: Coherence scalars
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BiofieldObject"
+components:
+  schemas:
+    BiofieldObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        coherence_score: { type: number }
+        hif_local: { type: number }
+        hif_cosmic: { type: number }
+        stress_load: { type: number }
+        notes:
+          type: array
+          items: { type: string }

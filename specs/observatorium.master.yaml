@@ -1,24 +1,14 @@
 openapi: 3.1.0
 info:
   title: World Observatorium API
-  version: "0.1.0"
-  description: Unified planetary sensing interface for GPT Actions.
-servers:
-  - url: https://observatorium.api.khaotic.ai
+  version: "1.2.0"
 paths:
   /snapshot/global:
     get:
-      operationId: getGlobalSnapshot
-      summary: Returns real-time snapshot across all domains.
+      summary: Aggregated planetary snapshot
       parameters:
-        - name: lat
-          in: query
-          required: true
-          schema: { type: number }
-        - name: lon
-          in: query
-          required: true
-          schema: { type: number }
+        - { name: lat, in: query, required: true, schema: { type: number } }
+        - { name: lon, in: query, required: true, schema: { type: number } }
       responses:
         "200":
           description: Aggregated data snapshot.
@@ -29,5 +19,119 @@ paths:
                 properties:
                   ok: { type: boolean }
                   fetchedAt: { type: string, format: date-time }
-                  time: { type: object }
-                  weather: { type: object }
+                  time:    { $ref: "#/components/schemas/TimeObject" }
+                  weather: { $ref: "#/components/schemas/WeatherObject" }
+                  air:     { $ref: "#/components/schemas/AirObject" }
+                  quakes:  { $ref: "#/components/schemas/QuakeCollection" }
+                  solar:   { $ref: "#/components/schemas/SolarObject" }
+                  storms:  { $ref: "#/components/schemas/AlertsObject" }
+                  magnetosphere: { $ref: "#/components/schemas/MagnetosphereObject" }
+                  radiation:
+                    type: object
+                    properties:
+                      ok: { type: boolean }
+                      radiationFlux:
+                        type: object
+                        properties:
+                          p10: { type: number }
+                          p50: { type: number, nullable: true }
+                          p100: { type: number, nullable: true }
+                      sources:
+                        type: array
+                        items: { type: string }
+                  biofield: { $ref: "#/components/schemas/BiofieldObject" }
+components:
+  schemas:
+    TimeObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        nowUtc: { type: string, format: date-time }
+        fetchedAt: { type: string, format: date-time }
+        sources: { type: array, items: { type: string } }
+    WeatherObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        temperatureC: { type: number }
+        humidityPct: { type: number }
+        windSpeedMs: { type: number }
+        wmo: { type: integer }
+        sources: { type: array, items: { type: string } }
+    AirObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        aqiUS: { type: number }
+        pm25: { type: number }
+        city: { type: string }
+        ts: { type: string, format: date-time }
+        sources: { type: array, items: { type: string } }
+    QuakeEvent:
+      type: object
+      properties:
+        id: { type: string }
+        time: { type: string, format: date-time }
+        magnitude: { type: number }
+        place: { type: string }
+        depthKm: { type: number }
+        coordinates: { type: object, properties: { lat: { type: number }, lon: { type: number } } }
+    QuakeCollection:
+      type: object
+      properties:
+        ok: { type: boolean }
+        events: { type: array, items: { $ref: "#/components/schemas/QuakeEvent" } }
+        sources: { type: array, items: { type: string } }
+    SolarFlare:
+      type: object
+      properties:
+        class: { type: string }
+        peakTime: { type: string, format: date-time }
+        region: { type: string }
+        note: { type: string }
+    SolarObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        flares: { type: array, items: { $ref: "#/components/schemas/SolarFlare" } }
+        cmeSummary: { type: object, additionalProperties: true }
+        kpIndex: { type: number }
+        sources: { type: array, items: { type: string } }
+    AlertsObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        fetchedAt: { type: string, format: date-time }
+        region: { type: string }
+        alerts:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              event: { type: string }
+              severity: { type: string }
+              certainty: { type: string }
+              onset: { type: string, format: date-time }
+              expires: { type: string, format: date-time }
+              headline: { type: string }
+              area: { type: string }
+              instruction: { type: string }
+              source: { type: string }
+    MagnetosphereObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        kpIndex: { type: number }
+        kpTrend: { type: string, enum: [rising, steady, falling] }
+        dstIndex: { type: number, nullable: true }
+        sources: { type: array, items: { type: string } }
+    BiofieldObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        coherence_score: { type: number }
+        hif_local: { type: number }
+        hif_cosmic: { type: number }
+        stress_load: { type: number }
+        notes: { type: array, items: { type: string } }

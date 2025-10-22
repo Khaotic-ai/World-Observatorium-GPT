@@ -1,0 +1,49 @@
+openapi: 3.1.0
+info:
+  title: NOAA Weather Alerts
+  version: "1.0.0"
+  description: Weather watches/warnings/advisories for a region.
+servers:
+  - url: https://api.weather.gov
+paths:
+  /alerts:
+    get:
+      operationId: getNoaaAlerts
+      summary: Get active alerts
+      parameters:
+        - { name: status, in: query, required: false, schema: { type: string, enum: [actual] } }
+        - { name: event, in: query, required: false, schema: { type: string } }
+        - { name: region, in: query, required: false, schema: { type: string }, description: "ISO-3166-2 region code" }
+        - { name: lat, in: query, required: false, schema: { type: number, minimum: -90, maximum: 90 } }
+        - { name: lon, in: query, required: false, schema: { type: number, minimum: -180, maximum: 180 } }
+        - { name: radius_km, in: query, required: false, schema: { type: number, minimum: 1, maximum: 500 } }
+      responses:
+        "200":
+          description: Active alerts (filtered)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertsObject"
+components:
+  schemas:
+    AlertsObject:
+      type: object
+      properties:
+        ok: { type: boolean }
+        fetchedAt: { type: string, format: date-time }
+        region: { type: string }
+        alerts:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: string }
+              event: { type: string }
+              severity: { type: string }
+              certainty: { type: string }
+              onset: { type: string, format: date-time }
+              expires: { type: string, format: date-time }
+              headline: { type: string }
+              area: { type: string }
+              instruction: { type: string }
+              source: { type: string, example: "NOAA/NWS" }

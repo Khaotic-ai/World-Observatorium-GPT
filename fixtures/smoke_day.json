@@ -1,0 +1,51 @@
+{
+  "time": {
+    "ok": true,
+    "nowUtc": "2025-10-18T02:00:00Z"
+  },
+  "weather": {
+    "ok": true,
+    "temperatureC": 28.0,
+    "humidityPct": 35.0,
+    "windSpeedMs": 2.5,
+    "wmo": 3
+  },
+  "air": {
+    "ok": true,
+    "aqiUS": 150,
+    "pm25": 55.0,
+    "city": "Cooloola Cove",
+    "ts": "2025-10-18T01:59:30Z"
+  },
+  "quakes": {
+    "ok": true,
+    "events": []
+  },
+  "solar": {
+    "ok": true,
+    "flares": []
+  },
+  "magnetosphere": {
+    "ok": true,
+    "kpIndex": 2.0,
+    "kpTrend": "steady",
+    "dstIndex": null,
+    "sources": [
+      "NOAA/SWPC"
+    ]
+  },
+  "storms": {
+    "ok": true,
+    "region": "AU-QLD",
+    "alerts": []
+  },
+  "radiation": {
+    "ok": true,
+    "radiationFlux": {
+      "p10": 0.6
+    },
+    "sources": [
+      "NOAA/GOES"
+    ]
+  }
+}

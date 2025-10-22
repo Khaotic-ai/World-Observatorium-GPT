@@ -1,0 +1,315 @@
+From 1111111111111111111111111111111111111111 Mon Sep 17 00:00:00 2001
+From: World Observatorium Bot <noreply@example.com>
+Date: Wed, 22 Oct 2025 22:08:27 +0000
+Subject: [PATCH 1/2] PR-1: Add SWPC adapters and /solarwind/rt endpoint
+
+---
+ orchestrator/adapters/swpc.py | 146 ++++++++++++++++++++++++++++++++++++++++++
+ orchestrator/app.py           |  41 ++++++++++++
+ specs/observatorium.additions.yaml |  46 +++++++++++++
+ 3 files changed, 233 insertions(+)
+ create mode 100644 orchestrator/adapters/swpc.py
+ create mode 100644 specs/observatorium.additions.yaml
+
+diff --git a/orchestrator/adapters/swpc.py b/orchestrator/adapters/swpc.py
+new file mode 100644
+index 0000000..aaaaaaa
+--- /dev/null
++++ b/orchestrator/adapters/swpc.py
+@@ -0,0 +1,146 @@
++from __future__ import annotations
++import pandas as pd, requests
++from dateutil import parser as dparser
++
++def _resample10(df: pd.DataFrame) -> pd.DataFrame:
++    return (df.sort_index()
++              .resample("10min").mean()
++              .interpolate(limit=3))
++
++def fetch_kp_1m(hours: int = 48) -> pd.DataFrame:
++    url = "https://services.swpc.noaa.gov/json/planetary_k_index_1m.json"
++    js = requests.get(url, timeout=20).json()
++    df = pd.DataFrame(js)
++    if "time_tag" in df: df["time"] = pd.to_datetime(df["time_tag"])
++    else:                 df["time"] = pd.to_datetime(df.iloc[:,0])
++    if "kp_index" in df: df["kp"] = pd.to_numeric(df["kp_index"], errors="coerce")
++    elif "estimated_kp" in df: df["kp"] = pd.to_numeric(df["estimated_kp"], errors="coerce")
++    else: df["kp"] = pd.NA
++    df = df[["time","kp"]].dropna().set_index("time").sort_index()
++    return _resample10(df.last(f"{{hours}}h"))
++
++def fetch_dscovr_plasma(hours: int = 48) -> pd.DataFrame:
++    url = "https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json"
++    js = requests.get(url, timeout=20).json()
++    cols = js[0]; df = pd.DataFrame(js[1:], columns=cols)
++    df["time"] = pd.to_datetime(df["time_tag"])
++    for c in ("density","speed","temperature"): df[c] = pd.to_numeric(df[c], errors="coerce")
++    df = df.set_index("time")[["density","speed","temperature"]].dropna().sort_index()
++    df = df.rename(columns={"speed":"solar_wind_speed"})
++    return _resample10(df.last(f"{{hours}}h"))
++
++def fetch_dscovr_mag(hours: int = 48) -> pd.DataFrame:
++    url = "https://services.swpc.noaa.gov/products/solar-wind/mag-6-hour.json"
++    js = requests.get(url, timeout=20).json()
++    cols = js[0]; df = pd.DataFrame(js[1:], columns=cols)
++    df["time"] = pd.to_datetime(df["time_tag"])
++    for c in ("bx_gsm","by_gsm","bz_gsm","bt"): df[c] = pd.to_numeric(df[c], errors="coerce")
++    df = df.set_index("time")[["bx_gsm","by_gsm","bz_gsm","bt"]].dropna().sort_index()
++    return _resample10(df.last(f"{{hours}}h"))
++
++def fetch_goes_protons(hours: int = 48) -> pd.DataFrame:
++    url = "https://services.swpc.noaa.gov/json/goes/primary/integral-protons-plot-1-day.json"
++    js = requests.get(url, timeout=20).json()
++    rows = []
++    for r in js:
++        if r.get("energy") == ">=10 MeV":
++            rows.append((dparser.parse(r["time_tag"]), float(r["flux"])))
++    df = pd.DataFrame(rows, columns=["time","proton_pfu"]).set_index("time").sort_index()
++    return _resample10(df.last(f"{{hours}}h"))
++
++def bundle(hours: int = 48) -> pd.DataFrame:
++    kp = fetch_kp_1m(hours)
++    mag = fetch_dscovr_mag(hours)
++    plasma = fetch_dscovr_plasma(hours)
++    pfu = fetch_goes_protons(hours)
++    return pd.concat([kp, mag, plasma, pfu], axis=1).sort_index()
+diff --git a/orchestrator/app.py b/orchestrator/app.py
+index bbbbbbb..ccccccc 100644
+--- a/orchestrator/app.py
++++ b/orchestrator/app.py
+@@ -1,3 +1,4 @@
++from orchestrator.adapters import swpc
+@@ -120,3 +121,42 @@
+-    return {
++    return {
+         "ok": status != "error",
+         "status": status,
+         "fetchedAt": fetched_at,
+         "missingDomains": missing,
+         "time": time_data,
+         "weather": weather,
+         "quakes": quakes,
+         "solar": solar,
+         "ligo": ligo_events
+     }
++
++# --- Appended routes (Phase 3.2) ---
++@app.get("/solarwind/rt")
++def get_solarwind_rt(hours: int = 48):
++    """Real-time solar wind (10-min)"""
++    df = swpc.bundle(hours=hours)
++    return {
++        "ok": True,
++        "hours": hours,
++        "count": len(df),
++        "time": [t.isoformat() for t in df.index.to_pydatetime()],
++        "kp": df["kp"].tolist() if "kp" in df else [],
++        "bz_gsm": df["bz_gsm"].tolist() if "bz_gsm" in df else [],
++        "bt": df["bt"].tolist() if "bt" in df else [],
++        "solar_wind_speed": df["solar_wind_speed"].tolist() if "solar_wind_speed" in df else [],
++        "density": df["density"].tolist() if "density" in df else [],
++        "temperature": df["temperature"].tolist() if "temperature" in df else [],
++        "proton_pfu": df["proton_pfu"].tolist() if "proton_pfu" in df else []
++    }
+diff --git a/specs/observatorium.additions.yaml b/specs/observatorium.additions.yaml
+new file mode 100644
+index 0000000..ddddddd
+--- /dev/null
++++ b/specs/observatorium.additions.yaml
+@@ -0,0 +1,46 @@
++paths:
++  /solarwind/rt:
++    get:
++      summary: Realtime solar wind, geomagnetic, and proton flux bundle
++      parameters:
++        - in: query
++          name: hours
++          schema: {{ type: integer, minimum: 1, maximum: 72, default: 48 }}
++      responses:
++        "200":
++          description: OK
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  ok: {{ type: boolean }}
++                  hours: {{ type: integer }}
++                  time: {{ type: array, items: {{ type: string, format: date-time }} }}
++                  kp: {{ type: array, items: {{ type: number }} }}
++                  bz_gsm: {{ type: array, items: {{ type: number }} }}
++                  bt: {{ type: array, items: {{ type: number }} }}
++                  solar_wind_speed: {{ type: array, items: {{ type: number }} }}
++                  density: {{ type: array, items: {{ type: number }} }}
++                  temperature: {{ type: array, items: {{ type: number }} }}
++                  proton_pfu: {{ type: array, items: {{ type: number }} }}
+-- 
+2.42.0
+
+From 2222222222222222222222222222222222222222 Mon Sep 17 00:00:00 2001
+From: World Observatorium Bot <noreply@example.com>
+Date: Wed, 22 Oct 2025 22:08:27 +0000
+Subject: [PATCH 2/2] PR-2: Add η coherence engine and /coherence/eta endpoint
+
+---
+ engine/live/__init__.py     |  5 +++++
+ engine/live/features.py     | 28 ++++++++++++++++++++++++++
+ engine/live/coherence.py    | 61 +++++++++++++++++++++++++++++++++++++++++++++
+ engine/live/model.py        | 29 ++++++++++++++++++++++++
+ orchestrator/app.py         | 28 ++++++++++++++++++++++++
+ specs/observatorium.additions.yaml | 34 ++++++++++++++++++++++++++++
+ 6 files changed, 185 insertions(+)
+ create mode 100644 engine/live/__init__.py
+ create mode 100644 engine/live/features.py
+ create mode 100644 engine/live/coherence.py
+ create mode 100644 engine/live/model.py
+
+diff --git a/engine/live/__init__.py b/engine/live/__init__.py
+new file mode 100644
+index 0000000..eeeeeee
+--- /dev/null
++++ b/engine/live/__init__.py
+@@ -0,0 +1,5 @@
++# World Observatorium — live engine package (Phase 3.2)
++
+diff --git a/engine/live/features.py b/engine/live/features.py
+new file mode 100644
+index 0000000..fffffff
+--- /dev/null
++++ b/engine/live/features.py
+@@ -0,0 +1,28 @@
++from __future__ import annotations
++import pandas as pd
++from datetime import datetime, timezone
++
++def resample10(df: pd.DataFrame) -> pd.DataFrame:
++    return (df.sort_index()
++              .resample("10min").mean()
++              .interpolate(limit=3))
++
++def lunar_phase_fraction(dt_utc: datetime) -> float:
++    base = datetime(2000,1,6,18,14, tzinfo=timezone.utc)
++    synodic = 29.53058867
++    days = (dt_utc - base).total_seconds()/86400.0
++    return (days % synodic)/synodic
+diff --git a/engine/live/coherence.py b/engine/live/coherence.py
+new file mode 100644
+index 0000000..aaaaaab
+--- /dev/null
++++ b/engine/live/coherence.py
+@@ -0,0 +1,61 @@
++from __future__ import annotations
++import numpy as np, pandas as pd
++from .features import lunar_phase_fraction, resample10
++from orchestrator.adapters import swpc
++
++WEIGHTS = {"kp":0.16,"proton":0.12,"bz":0.12,"vsw":0.07,"dst":0.07,
++            "aqi":0.12,"temp":0.12,"humidity":0.08,"wind":0.08,"seismic":0.06}
++
++def _score_temp(t):    return np.clip(1 - (np.abs(t-25)/12), 0, 1)
++def _score_aqi(a):     return np.clip(1 - (a/150.0), 0, 1)
++def _score_kp(k):      return np.clip(1 - (k/8.0), 0, 1)
++def _score_pfu(p):     return np.clip(1 - (p/10.0), 0, 1)
++def _score_wind(w):    return np.clip(1 - (np.abs(w-9)/20.0), 0, 1)
++def _score_hum(h):     return np.clip(1 - (np.abs(h-50)/35.0), 0, 1)
++def _score_bz(bz):     return np.clip(1 - (np.clip(-bz,0,None)/20.0), 0, 1)
++def _score_vsw(v):     return np.clip(1 - (np.clip(v-400,0,None)/600.0), 0, 1)
++def _score_dst(dst):   return np.clip(1 - (np.clip(-dst,0,None)/300.0), 0, 1)
++
++def compute_eta_timeseries(lat: float, lon: float, hours: int = 48) -> pd.DataFrame:
++    sw = swpc.bundle(hours=hours)
++    df = sw.copy()
++    comps = pd.DataFrame(index=df.index)
++    if "kp" in df:                  comps["kp"] = _score_kp(df["kp"])
++    if "proton_pfu" in df:          comps["proton"] = _score_pfu(df["proton_pfu"])
++    if "bz_gsm" in df:              comps["bz"] = _score_bz(df["bz_gsm"])
++    if "solar_wind_speed" in df:    comps["vsw"] = _score_vsw(df["solar_wind_speed"])
++    if "dst" in df:                 comps["dst"] = _score_dst(df["dst"])
++    # surface hooks: temp_c, humidity_pct, wind_kmh, aqi_us, seismic_local
++    for c in ("temp_c","humidity_pct","wind_kmh","aqi_us","seismic_local"):
++        if c in df:
++            pass
++    w = {k:v for k,v in WEIGHTS.items() if k in comps.columns}
++    weight_vec = pd.Series(w)
++    df["eta"] = (comps.fillna(0) * weight_vec).sum(axis=1) / weight_vec.sum()
++    return df
+diff --git a/engine/live/model.py b/engine/live/model.py
+new file mode 100644
+index 0000000..aaaaaac
+--- /dev/null
++++ b/engine/live/model.py
+@@ -0,0 +1,29 @@
++from __future__ import annotations
++import pandas as pd
++
++def train_forecaster(df: pd.DataFrame, horizon_steps: int = 6):
++    try:
++        import lightgbm as lgb
++        from sklearn.model_selection import train_test_split
++    except Exception as e:
++        print("LightGBM/Sklearn missing; skip model training.", e)
++        return None, None
++    data = df.dropna(subset=["eta"]).copy()
++    if len(data) < 400: return None, None
++    y = data["eta"].shift(-horizon_steps)
++    X = data.drop(columns=["eta"]).select_dtypes(include=['float','int']).iloc[:-horizon_steps]
++    y = y.iloc[:-horizon_steps]; X = X.loc[y.index]
++    Xtr,Xte,ytr,yte = train_test_split(X,y, test_size=0.25, shuffle=False)
++    model = lgb.LGBMRegressor(n_estimators=400, learning_rate=0.03, subsample=0.9, colsample_bytree=0.9)
++    model.fit(Xtr,ytr, eval_set=[(Xte,yte)], eval_metric="l2", verbose=False)
++    importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
++    return model, importances
+diff --git a/orchestrator/app.py b/orchestrator/app.py
+index cccccc1..dddddd2 100644
+--- a/orchestrator/app.py
++++ b/orchestrator/app.py
+@@ -1,3 +1,4 @@
++from engine.live import coherence
+@@ -150,3 +151,30 @@
+-    }
++    }
++
++@app.get("/coherence/eta")
++def get_eta(lat: float, lon: float, hours: int = 48):
++    df = coherence.compute_eta_timeseries(lat=lat, lon=lon, hours=hours)
++    return {
++        "ok": True,
++        "hours": hours,
++        "time": [t.isoformat() for t in df.index.to_pydatetime()],
++        "eta": df["eta"].tolist()
++    }
+diff --git a/specs/observatorium.additions.yaml b/specs/observatorium.additions.yaml
+index dddddd1..eeeeee2 100644
+--- a/specs/observatorium.additions.yaml
++++ b/specs/observatorium.additions.yaml
+@@ -46,3 +46,34 @@
+ 
++  /coherence/eta:
++    get:
++      summary: Compute η (biofield coherence) time-series for a site
++      parameters:
++        - in: query
++          name: lat
++          required: true
++          schema: { type: number }
++        - in: query
++          name: lon
++          required: true
++          schema: { type: number }
++        - in: query
++          name: hours
++          schema: { type: integer, minimum: 1, maximum: 72, default: 48 }
++      responses:
++        "200":
++          description: OK
++          content:
++            application/json:
++              schema:
++                type: object
++                properties:
++                  ok: { type: boolean }
++                  hours: { type: integer }
++                  time: { type: array, items: { type: string, format: date-time } }
++                  eta: { type: array, items: { type: number } }
+-- 
+2.42.0
