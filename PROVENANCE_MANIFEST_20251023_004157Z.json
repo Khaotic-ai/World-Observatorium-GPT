@@ -1,0 +1,174 @@
+﻿{
+    "metadata":  {
+                     "project":  "World Observatorium",
+                     "directive":  "Triadic Axis - IP Provenance",
+                     "utc_generated_at":  "2025-10-23T00:41:57.8025244Z",
+                     "machine":  "BUNNY-LAPTOP",
+                     "user":  "monyb",
+                     "os":  "Microsoft Windows 11 Pro",
+                     "powershell_version":  "5.1.26100.6899",
+                     "git_commit":  "dd60fabff561265dea652a5d6ac870fedd41e6e9",
+                     "git_branch":  "feat/phase-3-2",
+                     "git_remote":  "https://github.com/Khaotic-ai/World-Observatorium-GPT.git",
+                     "repo_path":  "C:\\World-Observatorium-GPT",
+                     "include_paths":  [
+                                           "orchestrator",
+                                           "engine",
+                                           "schema",
+                                           "adapters",
+                                           "IP_CLAIM.md",
+                                           "LICENSE",
+                                           "README.md"
+                                       ],
+                     "extra_paths":  [
+
+                                     ],
+                     "hash_algorithm":  "SHA-256"
+                 },
+    "files":  [
+                  {
+                      "path_relative":  ".\\engine\\__init__.py",
+                      "size_bytes":  0,
+                      "last_write_utc":  "2025-10-22T22:27:03.0007955Z",
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path_relative":  ".\\engine\\live\\__init__.py",
+                      "size_bytes":  58,
+                      "last_write_utc":  "2025-10-22T11:59:32.0000000Z",
+                      "sha256":  "A9DFC1D7933BD9C37AE0ECA6F5828BF4DFAC26CC58D6559D21B15A96EB4FD030"
+                  },
+                  {
+                      "path_relative":  ".\\engine\\live\\coherence.py",
+                      "size_bytes":  2703,
+                      "last_write_utc":  "2025-10-22T11:59:32.0000000Z",
+                      "sha256":  "B786035454C0B92DE3EF0709919CDC09845D0F3BB8930E4445E683D28157215B"
+                  },
+                  {
+                      "path_relative":  ".\\engine\\live\\features.py",
+                      "size_bytes":  599,
+                      "last_write_utc":  "2025-10-22T11:59:32.0000000Z",
+                      "sha256":  "EBDFFC2545D1FB95D5C09DF71817AAD6E4990B34B4AABD2E3BBA1F781A714339"
+                  },
+                  {
+                      "path_relative":  ".\\engine\\live\\model.py",
+                      "size_bytes":  1182,
+                      "last_write_utc":  "2025-10-22T11:59:32.0000000Z",
+                      "sha256":  "8F87C8D3D468B6EAF36DE0C4AF9779D9C1FE3ECB256BFCBF03C10086EDB7D7FF"
+                  },
+                  {
+                      "path_relative":  ".\\IP_CLAIM.md",
+                      "size_bytes":  3289,
+                      "last_write_utc":  "2025-10-23T00:27:57.7142088Z",
+                      "sha256":  "CD73A8A15F3C0F64AD1AE3875D614E668F31F7F16256B1C800B3C3282C7AC7B2"
+                  },
+                  {
+                      "path_relative":  ".\\LICENSE",
+                      "size_bytes":  11,
+                      "last_write_utc":  "2025-10-15T15:36:08.0000000Z",
+                      "sha256":  "ABB2896DC3C2A9402F901B88D5035CF0A83D5CF7C17E73642CDF562B0B9D3BC5"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\geomag.py",
+                      "size_bytes":  874,
+                      "last_write_utc":  "2025-10-18T06:52:51.5659680Z",
+                      "sha256":  "2D20C02023A20E662D047E264439116A82D49983A7D2EDDC00DC553E6112739B"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\ligo.py",
+                      "size_bytes":  976,
+                      "last_write_utc":  "2025-10-16T03:47:00.4747522Z",
+                      "sha256":  "E00991816DE6E8EC867F40F2165843A283DD0E5DFE4EA6E81B251374E9497A4C"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\nasa_donki.py",
+                      "size_bytes":  1367,
+                      "last_write_utc":  "2025-10-16T03:47:00.4665967Z",
+                      "sha256":  "E100A6B83E726F0370E1B4D0DC2C060B7646AD55690E74FFCB74D0B768AD8BA7"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\noaa_alerts.py",
+                      "size_bytes":  1258,
+                      "last_write_utc":  "2025-10-18T06:52:51.5613707Z",
+                      "sha256":  "01C6DDCE722D0E632B5BBBF4F3C6F0847476B35F0D0392F3EA77496313FDB221"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\open_meteo.py",
+                      "size_bytes":  774,
+                      "last_write_utc":  "2025-10-17T04:28:05.7650569Z",
+                      "sha256":  "25D8E3FF02E3EA0C45EBE7460CD8A587D048051E97C3E6EDF941AB70695D1D40"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\radiation.py",
+                      "size_bytes":  557,
+                      "last_write_utc":  "2025-10-18T06:52:51.5713190Z",
+                      "sha256":  "2A581D1C2E9F7D49213A277B6922A95DD429715DFC777A10328B977950FCC5F9"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\swpc.py",
+                      "size_bytes":  4460,
+                      "last_write_utc":  "2025-10-22T22:42:09.0466068Z",
+                      "sha256":  "259713D7D056EE1EE89FDFDD22DABF4D6EA34DD0272ED696492B58A4070E7078"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\swpc.py.bak",
+                      "size_bytes":  2786,
+                      "last_write_utc":  "2025-10-22T11:59:32.0000000Z",
+                      "sha256":  "70F816CB15B17167F04013BE3A54C147F3E986C60C73BF800CFC24E54694DF58"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\usgs.py",
+                      "size_bytes":  1613,
+                      "last_write_utc":  "2025-10-16T03:47:00.4586002Z",
+                      "sha256":  "29F275B9FC39E84B415A8427071FDEBD48C1F6F5CF4BCE80CF0F9AD8AEE32606"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\adapters\\util_cache.py",
+                      "size_bytes":  518,
+                      "last_write_utc":  "2025-10-18T06:52:51.5775080Z",
+                      "sha256":  "FFF078B297ACB24A6B69EC000CBEC10C93E998F64D4AB4904EDC90202544D21D"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\app.py",
+                      "size_bytes":  2515,
+                      "last_write_utc":  "2025-10-22T22:47:27.6711310Z",
+                      "sha256":  "1752EB007D90C5AF5D7891D9535E9B498ECA9AE81ACBE3F6F05D87ACA9E18EB9"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\app.py.bak",
+                      "size_bytes":  4393,
+                      "last_write_utc":  "2025-10-22T22:10:43.1400281Z",
+                      "sha256":  "B0E53C6950BA21D5F8C1BF6391046514DBD5B87B9AC51684C4438E3110B3A695"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\cache.py",
+                      "size_bytes":  528,
+                      "last_write_utc":  "2025-10-17T04:28:04.3240968Z",
+                      "sha256":  "733BD956FDCE518F5C61CA9271355A8A48A52FCECC29FB453B718C5088998C38"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\models.py",
+                      "size_bytes":  2183,
+                      "last_write_utc":  "2025-10-17T04:28:04.3200886Z",
+                      "sha256":  "8EC4030AD76780FA630F306FDF4B978B1C16C538C8EA1F248E1B685101F5457B"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\orchestrator_app_updated.py",
+                      "size_bytes":  4393,
+                      "last_write_utc":  "2025-10-22T22:06:20.8683461Z",
+                      "sha256":  "B0E53C6950BA21D5F8C1BF6391046514DBD5B87B9AC51684C4438E3110B3A695"
+                  },
+                  {
+                      "path_relative":  ".\\orchestrator\\services\\hif_engine.py",
+                      "size_bytes":  1203,
+                      "last_write_utc":  "2025-10-20T06:30:09.3264997Z",
+                      "sha256":  "E5F3FC65CD99329BECBB21345D8ADCD5130D095BAF85A7160D922E4AA39D7C81"
+                  },
+                  {
+                      "path_relative":  ".\\README.md",
+                      "size_bytes":  582,
+                      "last_write_utc":  "2025-10-15T15:36:08.0000000Z",
+                      "sha256":  "BFFEE8EC331CB2EDCE814AAEAC4B8DB929B251A7BA5CEED7F2228B44BF39A6D6"
+                  }
+              ]
+}

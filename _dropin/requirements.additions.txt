@@ -1,0 +1,7 @@
+
+requests
+python-dateutil
+pandas
+numpy
+lightgbm   # optional for forecasting
+shap       # optional for SHAP summaries
