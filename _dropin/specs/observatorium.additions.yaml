@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 # OpenAPI additions for World Observatorium (Phase 3.2)
 paths:
@@ -54,3 +55,61 @@ paths:
                   hours: { type: integer }
                   time: { type: array, items: { type: string, format: date-time } }
                   eta: { type: array, items: { type: number } }
+=======
+
+# OpenAPI additions for World Observatorium (Phase 3.2)
+paths:
+  /solarwind/rt:
+    get:
+      summary: Realtime solar wind, geomagnetic, and proton flux bundle
+      parameters:
+        - in: query
+          name: hours
+          schema: { type: integer, minimum: 1, maximum: 72, default: 48 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  hours: { type: integer }
+                  time: { type: array, items: { type: string, format: date-time } }
+                  kp: { type: array, items: { type: number } }
+                  bz_gsm: { type: array, items: { type: number } }
+                  bt: { type: array, items: { type: number } }
+                  solar_wind_speed: { type: array, items: { type: number } }
+                  density: { type: array, items: { type: number } }
+                  temperature: { type: array, items: { type: number } }
+                  proton_pfu: { type: array, items: { type: number } }
+
+  /coherence/eta:
+    get:
+      summary: Compute η (biofield coherence) time-series for a site
+      parameters:
+        - in: query
+          name: lat
+          required: true
+          schema: { type: number }
+        - in: query
+          name: lon
+          required: true
+          schema: { type: number }
+        - in: query
+          name: hours
+          schema: { type: integer, minimum: 1, maximum: 72, default: 48 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  hours: { type: integer }
+                  time: { type: array, items: { type: string, format: date-time } }
+                  eta: { type: array, items: { type: number } }
+>>>>>>> Stashed changes
