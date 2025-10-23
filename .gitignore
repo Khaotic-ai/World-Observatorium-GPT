@@ -5,3 +5,15 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
+PROVENANCE_LOG_*.txt
+PROVENANCE_MANIFEST_*.json
+WorldObservatorium-Provenance_*.zip
+# Provenance artifacts
+PROVENANCE_LOG_*.txt
+PROVENANCE_MANIFEST_*.json
+WorldObservatorium-Provenance_*.zip
+
+# Local logs / caches
+*.log
+__pycache__/
+.env
