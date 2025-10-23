@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 from __future__ import annotations
 import pandas as pd
@@ -17,6 +18,8 @@ def lunar_phase_fraction(dt_utc: datetime) -> float:
     days = (dt_utc - base).total_seconds()/86400.0
     return (days % synodic)/synodic
 =======
+=======
+>>>>>>> Stashed changes
 
 from __future__ import annotations
 import pandas as pd
@@ -34,4 +37,7 @@ def lunar_phase_fraction(dt_utc: datetime) -> float:
     synodic = 29.53058867
     days = (dt_utc - base).total_seconds()/86400.0
     return (days % synodic)/synodic
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

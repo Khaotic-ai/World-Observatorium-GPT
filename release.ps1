@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 param(
   [string]$Tag = $(Get-Date -Format "yyyyMMdd-HHmmss")
 )
@@ -36,6 +37,8 @@ gh release create "prov-$Tag" `
 
 Write-Host "Release prov-$Tag published successfully." -ForegroundColor Green
 =======
+=======
+>>>>>>> Stashed changes
 param(
   [string]$Tag = $(Get-Date -Format "yyyyMMdd-HHmmss")
 )
@@ -71,4 +74,7 @@ gh release create "prov-$Tag" `
   --notes "$releaseNotes"
 
 Write-Host "Release prov-$Tag published successfully." -ForegroundColor Green
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 # PR‑2: η Coherence + Forecast Hook
 
@@ -11,6 +12,8 @@ Notes:
 - η weights emphasize geomagnetics/radiation; surface metrics hook in once BOM/AQI are wired.
 - `engine/live/model.py` provides LightGBM training stub (optional).
 =======
+=======
+>>>>>>> Stashed changes
 
 # PR‑2: η Coherence + Forecast Hook
 
@@ -22,4 +25,7 @@ Adds:
 Notes:
 - η weights emphasize geomagnetics/radiation; surface metrics hook in once BOM/AQI are wired.
 - `engine/live/model.py` provides LightGBM training stub (optional).
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

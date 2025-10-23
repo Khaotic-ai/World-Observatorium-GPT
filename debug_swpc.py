@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ﻿import traceback
 try:
     from orchestrator.adapters import swpc
@@ -11,6 +12,8 @@ except Exception as e:
     print("ERROR:", e)
     traceback.print_exc()
 =======
+=======
+>>>>>>> Stashed changes
 ﻿import traceback
 try:
     from orchestrator.adapters import swpc
@@ -22,4 +25,7 @@ try:
 except Exception as e:
     print("ERROR:", e)
     traceback.print_exc()
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

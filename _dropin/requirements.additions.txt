@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 requests
 python-dateutil
@@ -7,6 +8,8 @@ numpy
 lightgbm   # optional for forecasting
 shap       # optional for SHAP summaries
 =======
+=======
+>>>>>>> Stashed changes
 
 requests
 python-dateutil
@@ -14,4 +17,7 @@ pandas
 numpy
 lightgbm   # optional for forecasting
 shap       # optional for SHAP summaries
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

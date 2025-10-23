@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 from __future__ import annotations
 import pandas as pd, requests
@@ -58,6 +59,8 @@ def bundle(hours: int = 48) -> pd.DataFrame:
     pfu = fetch_goes_protons(hours)
     return pd.concat([kp, mag, plasma, pfu], axis=1).sort_index()
 =======
+=======
+>>>>>>> Stashed changes
 
 from __future__ import annotations
 import pandas as pd, requests
@@ -116,4 +119,7 @@ def bundle(hours: int = 48) -> pd.DataFrame:
     plasma = fetch_dscovr_plasma(hours)
     pfu = fetch_goes_protons(hours)
     return pd.concat([kp, mag, plasma, pfu], axis=1).sort_index()
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

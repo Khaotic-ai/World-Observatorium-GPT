@@ -286,4 +286,7 @@ def bundle(hours: int = 48) -> pd.DataFrame:
     out = pd.concat([kp, mag, plasma, pfu], axis=1).sort_index()
     return out
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

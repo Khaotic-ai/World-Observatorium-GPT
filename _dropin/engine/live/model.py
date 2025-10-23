@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 from __future__ import annotations
 import pandas as pd
@@ -28,6 +29,8 @@ def train_forecaster(df: pd.DataFrame, horizon_steps: int = 6):
     importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
     return model, importances
 =======
+=======
+>>>>>>> Stashed changes
 
 from __future__ import annotations
 import pandas as pd
@@ -56,4 +59,7 @@ def train_forecaster(df: pd.DataFrame, horizon_steps: int = 6):
     model.fit(Xtr, ytr, eval_set=[(Xte, yte)], eval_metric="l2", verbose=False)
     importances = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
     return model, importances
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

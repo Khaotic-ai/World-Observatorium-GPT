@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 # --- Append to orchestrator/app.py ---
 from orchestrator.adapters import swpc
@@ -31,6 +32,8 @@ def get_eta(lat: float, lon: float, hours: int = 48):
         "eta": df["eta"].tolist()
     }
 =======
+=======
+>>>>>>> Stashed changes
 
 # --- Append to orchestrator/app.py ---
 from orchestrator.adapters import swpc
@@ -62,4 +65,7 @@ def get_eta(lat: float, lon: float, hours: int = 48):
         "time": [t.isoformat() for t in df.index.to_pydatetime()],
         "eta": df["eta"].tolist()
     }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

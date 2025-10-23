@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 # World Observatorium — Orchestrator App (updated)
 # NOTE: This file includes the robust /solarwind/rt route (NaN-safe) you requested.
 # It also provides /time/utc and /coherence/eta for convenience.
@@ -162,6 +163,8 @@ def get_eta(lat: float, lon: float, hours: int = 48):
 >>>>>>> Stashed changes
     }
 =======
+=======
+>>>>>>> Stashed changes
 # World Observatorium — Orchestrator App (updated)
 # NOTE: This file includes the robust /solarwind/rt route (NaN-safe) you requested.
 # It also provides /time/utc and /coherence/eta for convenience.

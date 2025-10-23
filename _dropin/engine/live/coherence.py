@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 from __future__ import annotations
 import numpy as np, pandas as pd
@@ -55,6 +56,8 @@ def compute_eta_timeseries(lat: float, lon: float, hours: int = 48) -> pd.DataFr
     df["eta"] = (comps.fillna(0) * weight_vec).sum(axis=1) / weight_vec.sum()
     return df
 =======
+=======
+>>>>>>> Stashed changes
 
 from __future__ import annotations
 import numpy as np, pandas as pd
@@ -110,4 +113,7 @@ def compute_eta_timeseries(lat: float, lon: float, hours: int = 48) -> pd.DataFr
     weight_vec = pd.Series(w)
     df["eta"] = (comps.fillna(0) * weight_vec).sum(axis=1) / weight_vec.sum()
     return df
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

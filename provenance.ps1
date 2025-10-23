@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <#  World Observatorium — Provenance Pack Generator (ASCII-safe)
     Creates SHA-256 hashes over key assets, logs git+env metadata,
     writes a TXT + JSON manifest, and zips the set.
@@ -149,6 +150,8 @@ Write-Host "  Log     : $logName"
 Write-Host "  Manifest: $jsonName"
 Write-Host "  ZIP     : $zipName"
 =======
+=======
+>>>>>>> Stashed changes
 <#  World Observatorium — Provenance Pack Generator (ASCII-safe)
     Creates SHA-256 hashes over key assets, logs git+env metadata,
     writes a TXT + JSON manifest, and zips the set.
@@ -298,4 +301,7 @@ Write-Host "Provenance pack created:" -ForegroundColor Green
 Write-Host "  Log     : $logName"
 Write-Host "  Manifest: $jsonName"
 Write-Host "  ZIP     : $zipName"
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

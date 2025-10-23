@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 # World Observatorium — Phase 3.2 Drop‑In
 
@@ -16,6 +17,8 @@
    - `GET /solarwind/rt?hours=48`
    - `GET /coherence/eta?lat=-25.95&lon=152.62&hours=48`
 =======
+=======
+>>>>>>> Stashed changes
 
 # World Observatorium — Phase 3.2 Drop‑In
 
@@ -32,4 +35,7 @@
 6. Run server and hit:
    - `GET /solarwind/rt?hours=48`
    - `GET /coherence/eta?lat=-25.95&lon=152.62&hours=48`
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
