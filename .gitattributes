@@ -1,0 +1,1 @@
+*.yml  text eol=lf`n*.yaml text eol=lf`n.git/hooks/* -text
